@@ -57,6 +57,39 @@ app.get('/products/search/:keyword', (req, res) => {
         }
     });
 })
+
+app.post
+/*undo soft delete*/
+app.put('/products/restore/:id', (req, res) => {
+    db.query(
+        'UPDATE products SET is_deleted = 0 WHERE id = ?',
+        [req.params.id],
+        (err, results) => {
+            if (err) {
+                res.status(500).json({ error: 'Error occurred while restoring product.', error: err });
+            } else {
+                res.status(200).json({ message: 'Product restored successfully.' });
+            }
+        }
+    )
+})
+/*Soft delete*/
+app.delete('/products/:id', (req, res) => {
+    /* delete goods based on id */
+    db.query(
+        'UPDATE products SET is_deleted = 1 WHERE id = ?',
+        [req.params.id],
+        (err, results) => {
+            if (err) {
+                res.status(500).json({ error: 'Error occurred while deleting product.', error: err });
+            } else {
+                res.status(200).json({ message: 'Product deleted successfully.' });
+            }
+        }
+    )
+})
+app.softdelete
+
 app.listen(3000, () => console.log(' Server running on port 3000'))
 
 
